@@ -1,9 +1,12 @@
 "use strict";
+const os = require("os");
 const path = require("path");
 const utils = require("./utils");
 const config = require("../config");
 const vueLoaderConfig = require("./vue-loader.conf");
 const { VueLoaderPlugin } = require("vue-loader");
+
+const threads = os.cpus().length; // cpu核数
 
 function resolve(dir) {
   return path.join(__dirname, "..", dir);
@@ -28,6 +31,8 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: "[name].js",
+    chunkFilename: "[name].[chunkhash].js",
+    assetModuleFilename: utils.assetsPath("img/[name].[hash:7].[ext]"), // 图片字体等通过type:asset处理的统一命名方式
     publicPath:
       process.env.NODE_ENV === "production"
         ? config.build.assetsPublicPath
@@ -51,11 +56,25 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: "babel-loader",
         include: [
           resolve("src"),
           resolve("test"),
           resolve("node_modules/webpack-dev-server/client")
+        ],
+        use: [
+          {
+            loader: "thread-loader", // 开启多进程打包
+            options: {
+              works: threads
+            }
+          },
+          {
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true, // 开启babel缓存，加速第二次等后续的打包速度直接读取缓存，缓存存放在node_modules/.cache文件下
+              cacheCompression: false // 关闭缓存文件压缩
+            }
+          }
         ]
       },
       {
@@ -65,34 +84,15 @@ module.exports = {
           dataUrlCondition: {
             maxSize: 10 * 1024
           }
-        },
-        generator: {
-          filename: utils.assetsPath("img/[name].[hash:7].[ext]")
         }
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        type: "asset",
-        parser: {
-          dataUrlCondition: {
-            maxSize: 10 * 1024
-          }
-        },
-        generator: {
-          filename: utils.assetsPath("media/[name].[hash:7].[ext]")
-        }
+        type: "asset/resource"
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        type: "asset",
-        parser: {
-          dataUrlCondition: {
-            maxSize: 10 * 1024
-          }
-        },
-        generator: {
-          filename: utils.assetsPath("fonts/[name].[hash:7].[ext]")
-        }
+        type: "asset/resource"
       }
     ]
   },

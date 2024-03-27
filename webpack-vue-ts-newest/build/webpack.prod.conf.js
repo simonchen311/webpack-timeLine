@@ -26,19 +26,19 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath("js/[name].[chunkhash].js"),
-    chunkFilename: utils.assetsPath("js/[id].[chunkhash].js"),
+    chunkFilename: utils.assetsPath("js/[name].[chunkhash].js"), // 非入口打包的其他文件名，比如import()动态导入分割的代码
     clean: true // 替换了cleanWebpackPlugin
   },
   optimization: {
     usedExports: true, // 开启tree-shaking的打点标识
     moduleIds: "named", // 默认的配置代替webpack.HashedModuleIdsPlugin
     runtimeChunk: {
-      name: "manifest"
+      name: entrypoint => `runtime~${entrypoint.name}.js` // 当一个文件引用了其他文件，确保在改变文件的hash变化后，不会引起引入文件的变化
     },
     minimize: true,
     minimizer: [
       new TerserWebpackPlugin({
-        parallel: true,
+        parallel: true, // 多进程压缩
         extractComments: false,
         terserOptions: {
           compress: {
@@ -50,14 +50,14 @@ const webpackConfig = merge(baseWebpackConfig, {
           }
         }
       }),
-      new CssMinimizerPlugin()
+      new CssMinimizerPlugin({})
     ],
     splitChunks: {
       chunks: "async",
       minSize: 20000, // 大于20kb的才分割
       minChunks: 1, // 模块至少使用的次数
-      maxAsyncRequests: 5, // 同时加载的模块最多是5个，只分割同时引入的前5个文件
-      maxInitialRequests: 3, // 首页加载的时候引入的文件最多3个
+      maxAsyncRequests: 30, // 同时加载的模块最多是30个，只分割同时引入的前30个文件
+      maxInitialRequests: 30, // 首页加载的时候引入的文件最多3个
       cacheGroups: {
         // 将模块放在缓存里面一起打包分割
         defaultVendors: {
@@ -66,7 +66,7 @@ const webpackConfig = merge(baseWebpackConfig, {
           name: "vendor",
           chunks: "initial",
           priority: -10,
-          reuseExistingChunk: false
+          reuseExistingChunk: true
         },
         app: {
           // 业务基础包大部分不是node_modules的模块，例如我们在common中存放的一些基础组件，其次是一些三方的组件库（这些是在node_modules中的，但是因为经常变动所以不适宜放在vendor中）
@@ -93,8 +93,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       "process.env": env
     }),
     new MiniCssExtraPlugin({
-      filename: utils.assetsPath("css/[name].[contenthash].css"),
-      chunkFilename: utils.assetsPath("css/[name].[contenthash].css")
+      filename: utils.assetsPath("css/[name].[contenthash:8].css"),
+      chunkFilename: utils.assetsPath("css/[name].[contenthash:8].css")
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
