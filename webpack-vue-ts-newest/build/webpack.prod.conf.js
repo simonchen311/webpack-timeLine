@@ -60,7 +60,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       maxInitialRequests: 3, // 首页加载的时候引入的文件最多3个
       cacheGroups: {
         // 将模块放在缓存里面一起打包分割
-        vendors: {
+        defaultVendors: {
           // 工程基础包 例如包括vue、vue-router、axios等常用不改变的包，可以做缓存
           test: /[\\/]node_modules[\\/]/,
           name: "vendor",

@@ -53,14 +53,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   optimization: {
-    moduleIds: "named"
+    moduleIds: "named",
+    emitOnErrors: true
   },
   plugins: [
     new webpack.DefinePlugin({
       "process.env": require("../config/dev.env")
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: "index.html",
