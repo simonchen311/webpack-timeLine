@@ -1,14 +1,22 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <!-- <div class="header"> -->
+      <!-- <img draggable @dragstart="dragStartHandle" src="./assets/logo.png" />
+      <h1>MIX智慧数据平台</h1> -->
+    <!-- </div> -->
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: "App"
-};
+    name: "App",
+    methods: {
+        dragStartHandle() {
+            console.log("开始拖拽")
+        }
+    }
+}
 </script>
 
 <style>

@@ -11,6 +11,8 @@
     "build": "node build/build.js "
   },
   "dependencies": {
+    "echarts": "^5.5.0",
+    "lib-flexible": "^0.3.2",
     "vue": "^2.5.2",
     "vue-hot-reload-api": "^2.3.4",
     "vue-router": "^3.0.1"
