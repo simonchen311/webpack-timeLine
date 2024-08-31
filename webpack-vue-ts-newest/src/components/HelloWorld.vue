@@ -5,10 +5,11 @@
     <ul>
       <li>
         <a
+          class = "propa"
           href="https://vuejs.org"
           target="_blank"
         >
-          Core Docs
+          {{ prop }}
         </a>
       </li>
       <li>
@@ -45,7 +46,7 @@
         </a>
       </li>
     </ul>
-    <h2>Ecosystem</h2>
+    <h2 class="eco">{{ test }}</h2>
     <ul>
       <li>
         <a
@@ -80,16 +81,26 @@
         </a>
       </li>
     </ul>
+    <button @click="changeTest">
+      点击一下
+    </button>
   </div>
 </template>
 
 <script>
 export default {
   name: "HelloWorld",
+  props: ["prop"],
   data () {
     return {
-      msg: "Welcome to Your Vue.js App"
+      msg: "Welcome to Your Vue.js App",
+      test: "Ecosystem"
     };
+  },
+  methods: {
+    changeTest () {
+      this.test = "Ecosystem-change";
+    }
   }
 };
 </script>

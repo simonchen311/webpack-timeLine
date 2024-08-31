@@ -1,0 +1,7 @@
+{
+  "plugins": ["testcafe"],
+  "extends": ["plugin:testcafe/recommended"],
+  "rules": {
+    "indent": ["error", 4]
+  }
+}

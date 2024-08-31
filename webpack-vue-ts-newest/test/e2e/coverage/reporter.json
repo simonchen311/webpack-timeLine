@@ -1,0 +1,29 @@
+{
+  "startTime": "2024-08-30T13:53:55.852Z",
+  "endTime": "2024-08-30T13:53:58.608Z",
+  "userAgents": [
+    "Chrome 128.0.0.0 / Sonoma 14"
+  ],
+  "passed": 1,
+  "total": 1,
+  "skipped": 0,
+  "fixtures": [
+    {
+      "name": "Getting Started",
+      "path": "/Users/Sunghao/Documents/Study/webpack5/webpack-timeLine/webpack-vue-ts-newest/test/e2e/main.test.js",
+      "meta": {},
+      "tests": [
+        {
+          "name": "First test",
+          "meta": {},
+          "errs": [],
+          "durationMs": 308,
+          "unstable": false,
+          "screenshotPath": null,
+          "skipped": false
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}
